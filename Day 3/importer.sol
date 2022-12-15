@@ -47,16 +47,20 @@ contract Charity {
             revert();
         }
 
+        amountCollected += msg.value;
+        
         // Q3: preventions of repeated donors.
+        bool isAlreadyDonor = false;
+
         for (uint256 i=0; i<donors.length; i++)
         {
             if (donors[i] == msg.sender) {
-                revert();
+                isAlreadyDonor = true;
+                break;
             }
         }
 
-        amountCollected += msg.value;
-        donors.push(msg.sender);
+        if (isAlreadyDonor) donors.push(msg.sender);
 
         if (amountCollected >= requiredAmount) {
             isOpen = false;
