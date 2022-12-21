@@ -56,5 +56,21 @@ contract Charity {
    {
        tags.push(_s[i]);
    }
+   function withdraw{                           // creating withdraw function
+
+    address private owner;                      //  Private state variable
+    constructor() public {                      // Defining a constructor   
+        owner=msg.sender;
+    }
+    function getOwner (                         // function to get address of owner 
+   ) public view returns(address){
+        return owner;
+
+    }
+    function getBalance(                      // function to return current balance to owner //
+    ) public view returns(uint256){
+        return owner.balance;
+    }
+   }
   }
 }
