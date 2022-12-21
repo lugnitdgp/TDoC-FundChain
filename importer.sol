@@ -6,7 +6,7 @@ contract Charity{
     uint256 public requiredAmount;
     string public description;
     uint256 public minAmount;
-    uint256 public AmountCollected;
+    uint256 public amountCollected;
     string[] public tags;
     bool public isOpen;
     address [] public donors;
@@ -21,21 +21,24 @@ contract Charity{
     )
     {
         charityOwner = payable(_charityowner);
-        charityName = _charityowner;
+        charityName = _charityname;
         requiredAmount = _requiredamount;
         description = _funddescription;
         minAmount = _minamount;
         tags = new string[] (0);
         isOpen = true;
-        noOfDonors = newAddress[] (0);
-        donors = new Address[] (0);
-        AmountCollected = 0;
+        noOfDonors = 0;
+        donors = new address[] (0);
+        amountCollected = 0;
     }
     function pay() external payable{
         if (msg.value < minAmount){
             revert();
         }
-        if(isOpen ! = true){
+        if(isOpen != true){
+            revert();
+        }
+        if(msg.sender == charityOwner){
             revert();
         }
         amountCollected += msg.value;
@@ -47,6 +50,10 @@ contract Charity{
     }
     function getCollectionPercentage() public view returns(uint256){
         return((amountCollected*100)/requiredAmount);
+    }
+    function withdraw() payable{
+        charityOwner.transfer(address(this).balance);
+         isOpen = false;
     }
     function addTags (string[] memory _s) public {
         for(uint256 i=0; i<_s.length; i++){
